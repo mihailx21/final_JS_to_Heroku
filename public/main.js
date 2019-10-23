@@ -114,6 +114,9 @@ function snakeRun(snake, direction) {
 
 //creating and appending main menu
 function mainMenu(score) {
+    let audio = new Audio
+    soundMainMenu(audio)
+    audio.play()
     let nickname = createAndAppendOnParent(container, 'input')
     nickname.classList.add('input-nickname')
     nickname.placeholder = 'Enter your nickname'
@@ -128,10 +131,12 @@ function mainMenu(score) {
     menuButtonPlay.onclick = () => {
         menuButtonPlay.classList.add('on-click')
         let gamerLoginText = `${nickname.value}`
-        if (nickname.value != ''){
-            if(confirm('The rules easy)\n - You can move snake by W,S,A,D or arrows\n - One "food" give you 1(one) point'))
+        if (nickname.value != '') {
+            if (confirm('The rules easy)\n - You can move snake by W,S,A,D or arrows\n - One "food" give you 1(one) point')) {
+                audio.pause()
                 playGame(menuButtonPlay, menuButtonScore, nickname, gamerLoginText)
-            else{
+            }
+            else {
                 alert('Realy? Are you joking on me?')
             }
         }
@@ -242,7 +247,7 @@ function playGame(menuButtonPlay, menuButtonScore, gamerLogin, gamerLoginText) {
             && snakeBody[0].getAttribute('data-y') == food.getAttribute('data-y')) {
             scorePoints++;
             score.innerText = `Your score: \n${scorePoints}`
-            console.log(scorePoints)
+            soundEat()
             food.classList.remove('food')
             let a = snakeBody[snakeBody.length - 1].getAttribute('data-x')
             let b = snakeBody[snakeBody.length - 1].getAttribute('data-y')
@@ -253,6 +258,7 @@ function playGame(menuButtonPlay, menuButtonScore, gamerLogin, gamerLoginText) {
 
         if (snakeBody[0].classList.contains('snake-body')) {
             removeObject(score)
+            soundFailGame()
             alert(`Game OVER ${gamerLoginText}!!!\nYou score is ${scorePoints}`)
             clearInterval(interval)
             removeObject(snakeField)
@@ -286,6 +292,26 @@ function showScore() {
         removeObject(buttonBack)
     }
 }
+
+function soundMainMenu(audio) {
+    audio.src = 'src/mainTeme.mp3'
+    audio.autoplay = true
+    audio.volume = 0.1
+}
+
+function soundEat() {
+    let audio = new Audio()
+    audio.src = 'src/eatsound.mp3'
+    audio.autoplay = true
+    audio.volume = 0.2
+}
+
+function soundFailGame() {
+    let audio = new Audio()
+    audio.src = 'src/game-over.mp3'
+    audio.autoplay = true
+}
+
 
 //--------------------------------------------------------------------------------------------
 
